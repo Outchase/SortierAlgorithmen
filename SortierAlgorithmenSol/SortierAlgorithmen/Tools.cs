@@ -71,5 +71,66 @@ namespace SortierAlgorithmen
 
         }
 
+        //quicksort creates two empty arrays to hold elements less than the pivot value and elements greater than the pivot value and then recursively sort the sub arrays
+        //notice: works on small data set
+        public int[] QuickSortArray(int[] array, int startIndex, int endingIndex)
+        {
+
+            var i = startIndex;
+            var j = endingIndex;
+            var pivot = array[startIndex];
+
+            while (i <= j)
+            {
+                while (array[i] < pivot)
+                {
+                    i++;
+                }
+
+                while (array[j] > pivot)
+                {
+                    j--;
+                }
+                if (i <= j)
+                {
+                    int temp = array[i];
+                    array[i] = array[j];
+                    array[j] = temp;
+                    i++;
+                    j--;
+                }
+            }
+
+            if (startIndex < j)
+                QuickSortArray(array, startIndex, j);
+            if (i < endingIndex)
+                QuickSortArray(array, i, endingIndex);
+            return array;
+        }
+
+
+        // function to print array
+        public void PrintArray(int[] array)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                Console.Write(array[i] + " ");
+            }
+            Console.WriteLine();
+        }
+
+        // function to put random values into array
+        public int[] PutValueInArray(int [] array)
+        {
+            Random rnd = new Random();
+            int Min = 0;
+            int Max = 20;
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i] = rnd.Next(Min, Max);
+            }
+            return array;
+        }
     }
 }
