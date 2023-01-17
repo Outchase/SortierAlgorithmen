@@ -7,8 +7,9 @@ namespace SortierAlgorithmen
         static void Main(string[] args)
         {
             bool wantToSortAgain = true;
-            bool isNumber = false;
             int numberOfNumbers = 0;
+            int minRange = 0;
+            int maxRange = 0;
 
             ASCIISIGN sign = new();
             Tools tools = new();
@@ -20,21 +21,22 @@ namespace SortierAlgorithmen
                 tools.PrintInColor(sign.title + "\n" + "Press Enter to Start\n", ConsoleColor.Yellow, true);
                 tools.OnPressContinue(true);
 
-                while (!isNumber)
-                {
-                    tools.PrintInColor("Please enter the amount of number you want to sort: ", ConsoleColor.Green, false);
-                    isNumber = int.TryParse(Console.ReadLine(), out numberOfNumbers);
-                }
+                numberOfNumbers = tools.NumberVerifier("Please enter the amount of number you want to sort: ");
+                minRange = tools.NumberVerifier("Please enter minimum Range: ");
+                maxRange = tools.NumberVerifier("Please enter maximum Range: ");
 
                 int[] array = new int[numberOfNumbers];
 
+
                 //int[] array = new int[] { 2, 5, -4, 11, 0, 18, 22, 67, 51, 6 };
 
-                tools.PutValueInArray(array);
+                tools.PutValueInArray(array, minRange, maxRange);
 
                 tools.PrintArray(array);
 
-                array = tools.QuickSortArray(array, 0, array.Length-1);
+                //array = tools.QuickSortArray(array, 0, array.Length - 1);
+
+                array = tools.HeapSort(array, array.Length);
 
                 tools.PrintArray(array);
 
