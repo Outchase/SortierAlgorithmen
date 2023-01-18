@@ -43,8 +43,10 @@ namespace SortierAlgorithmen
         }
 
         //Listens to two key press and return value, if parameter is true it clears the console
-        public bool OnPressYesOrNo(bool clearConsole)
+        public bool OnPressYesOrNo(bool clearConsole, string message)
         {
+            PrintInColor(message, ConsoleColor.Green, true);
+
             ConsoleKeyInfo userKeyInput;
             bool keyPressedRight = false;
             bool isAYes = false;
@@ -69,6 +71,36 @@ namespace SortierAlgorithmen
                 Console.Clear();
             }
             return isAYes;
+
+        }
+
+        public int OnChoice(bool clearConsole, string message, string[] array)
+        {
+           
+            //int userInput = 0;
+            int result = 0;
+            bool keyPressedRight = false;
+
+            while (!keyPressedRight)
+            {
+                Console.Clear();
+                PrintInColor(message, ConsoleColor.Green, true);
+                PrintStringArray(array);
+
+                int.TryParse(Console.ReadLine(), out result);
+
+                if (result > 0 && result < array.Length + 1)
+                {
+                    keyPressedRight = true;
+                }
+            }
+
+            if (clearConsole)
+            {
+                Console.Clear();
+            }
+
+            return result;
 
         }
 
@@ -188,12 +220,98 @@ namespace SortierAlgorithmen
             }
         }
 
+        //Mergesort works with divide & conquer
+        //Divide: starts dividing teh array into two halves until there are no half-arrays to divide
+        public int[] MergeSort(int[] array, int leftInt, int rightInt)
+        {
+            //checking if array has a range
+            if (leftInt < rightInt)
+            {
+
+                //Use left and right integer values to specify the index of the array's middle
+                int middlePoint = leftInt + (rightInt - leftInt) / 2;
+
+                //recursively calls itself to subdivide the right and left subarrays
+                MergeSort(array, leftInt, middlePoint);
+                MergeSort(array, middlePoint + 1, rightInt);
+
+                //Calls the merging method after each array contains one element
+                MergeArray(array, leftInt, middlePoint, rightInt);
+            }
+
+            return array;
+        }
+
+        //Conquer: sorts and merges the sub-arrays
+        public void MergeArray(int[] array, int left, int middle, int right)
+        {
+            //Helps to define temporary arrays
+            var leftArrayLength = middle - left + 1;
+            var rightArrayLength = right - middle;
+
+            //Create temporary arrays to hold values during sorting
+            var leftTempArray = new int[leftArrayLength];
+            var rightTempArray = new int[rightArrayLength];
+            int i;
+            int j;
+
+            //Using two loops to copy data into the temporary arrays
+            for (i = 0; i < leftArrayLength; ++i)
+            {
+                leftTempArray[i] = array[left + i];
+            }
+
+            for (j = 0; j < rightArrayLength; ++j)
+            {
+                rightTempArray[j] = array[middle + 1 + j];
+            }
+
+            i = 0;
+            j = 0;
+            int k = left;
+
+            //compare the elements in the left and right temporary array
+            while (i < leftArrayLength && j < rightArrayLength)
+            {
+                //if left temporary array is less or equal to the right temporary array element
+                //then swap position while sorting them into array[k]
+                if (leftTempArray[i] <= rightTempArray[j])
+                {
+                    array[k++] = leftTempArray[i++];
+                }
+                else
+                {
+                    array[k++] = rightTempArray[j++];
+                }
+            }
+
+            //Copying any remaining elements from the left and right temporary array into the merged array
+            while (i < leftArrayLength)
+            {
+                array[k++] = leftTempArray[i++];
+            }
+
+            while (j < rightArrayLength)
+            {
+                array[k++] = rightTempArray[j++];
+            }
+        }
+
         // function to print array
-        public void PrintArray(int[] array)
+        public void PrintIntArray(int[] array)
         {
             for (int i = 0; i < array.Length; i++)
             {
                 Console.Write(array[i] + " ");
+            }
+            Console.WriteLine();
+        }
+
+        public void PrintStringArray(string[] array)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                Console.Write(i+1 +". "+array[i] + "\n");
             }
             Console.WriteLine();
         }
